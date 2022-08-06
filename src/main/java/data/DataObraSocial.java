@@ -95,7 +95,7 @@ public class DataObraSocial {
 			
 			keyResultSet=stmt.getGeneratedKeys();
             if(keyResultSet!=null && keyResultSet.next()){
-                obra.setId(keyResultSet.getInt("id"));
+                obra.setId(keyResultSet.getInt(1));
             }
 
 			
@@ -229,10 +229,6 @@ public class DataObraSocial {
 			stmt.setInt(1, obra.getId());
 			stmt.executeUpdate();
 			
-			keyResultSet=stmt.getGeneratedKeys();
-            if(keyResultSet!=null && keyResultSet.next()){
-                obra.setId(keyResultSet.getInt("id"));
-            }
 			
 		}  catch (SQLException e) {
             e.printStackTrace();

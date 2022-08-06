@@ -64,4 +64,8 @@ public class ABMCPaciente {
 	public Paciente consultaUno(Paciente pacienteConsulta) {
 		return dataPac.getByLegajo(pacienteConsulta);
 	}
+	
+	public Paciente consultaUnoPorDocumento(Paciente pacienteConsulta) {
+		return dataPac.getByDocumento(pacienteConsulta);
+	}
 }
