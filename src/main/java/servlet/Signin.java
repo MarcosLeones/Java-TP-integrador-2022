@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Signin
  */
-@WebServlet({ "/src/main/webapp/WEB-INF/index", "/index", "/Index", "/INDEX" })
+@WebServlet({ "/Signin", "/signin", "/SIGNIN", "/signIn", "/SignIn" })
 public class Signin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
