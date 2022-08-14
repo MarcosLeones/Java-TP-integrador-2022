@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import entities.Documento;
 import entities.Especialidad;
 import entities.ObraSocial;
+import entities.Persona;
 import entities.Profesional;
 
 public class DataProfesional {
@@ -330,6 +331,55 @@ public class DataProfesional {
             	e.printStackTrace();
             }
 		}
+	}
+	
+	
+	public Profesional getByEmailYPass(Persona persona) {
+		
+		Profesional p = new Profesional();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from profesional where email=? and password=?");
+			stmt.setString(1, persona.getEmail());
+			stmt.setString(2, persona.getPassword());
+			rs=stmt.executeQuery();
+			
+			if (rs != null) {
+				if (rs.next()) {
+					Documento d = new Documento();
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+				
+					p.setObrasSociales(dos.getByProfesional(p));
+					p.setEspecialidades(de.getByProfesional(p));
+				}				
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
 	}
 
 }

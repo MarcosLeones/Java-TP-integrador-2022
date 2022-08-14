@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import entities.*;
+import logic.*;
+
 /**
  * Servlet implementation class Signin
  */
@@ -27,7 +31,7 @@ public class Signin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.getWriter().append("GET - Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -35,7 +39,36 @@ public class Signin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//response.getWriter().append("POST - Served at: ").append(request.getContextPath());
+		
+		//response.getWriter().append(request.getParameter("email")).append(request.getParameter("password"));
+		
+		
+		
+		Persona per = new Persona();
+		Login ctrlLogin = new Login();
+		
+		per.setEmail(request.getParameter("email"));
+		per.setPassword(request.getParameter("password"));
+		
+		per = ctrlLogin.validate(per);
+		
+		
+		if (per instanceof Paciente) {
+			request.getSession().setAttribute("usuario", per);
+			request.getRequestDispatcher("WEB-INF/menuPaciente.html").forward(request, response);
+		}
+		else if (per instanceof Profesional) {
+				request.getSession().setAttribute("usuario", per);
+				request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);;
+		}
+		
+		else {
+			request.getRequestDispatcher("WEB-INF/loginError.html").forward(request, response);;
+		}
+
+		
+		
 	}
 
 }
