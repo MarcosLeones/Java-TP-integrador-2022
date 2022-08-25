@@ -340,6 +340,9 @@ public class DataProfesional {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
+		p.setEmail("");
+		p.setPassword("");
+		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from profesional where email=? and password=?");
 			stmt.setString(1, persona.getEmail());
@@ -356,6 +359,7 @@ public class DataProfesional {
 					p.setNombre(rs.getString("nombre"));
 					p.setApellido(rs.getString("apellido"));
 					p.setEmail(rs.getString("email"));
+					p.setPassword(rs.getString("password"));
 				
 					p.setObrasSociales(dos.getByProfesional(p));
 					p.setEspecialidades(de.getByProfesional(p));

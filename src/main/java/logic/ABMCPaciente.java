@@ -15,7 +15,7 @@ public class ABMCPaciente {
 		LinkedList<Paciente> pacientesActuales = new LinkedList<Paciente>(dataPac.getAll()); 
 		
 		for (Paciente p: pacientesActuales) {
-			if (p.getDocumento().getTipo() == pacienteAlta.getDocumento().getTipo() && p.getDocumento().getNro() == pacienteAlta.getDocumento().getNro()) {
+			if (p.getDocumento().getTipo().equals(pacienteAlta.getDocumento().getTipo()) && p.getDocumento().getNro() == pacienteAlta.getDocumento().getNro()) {
 				throw new IllegalArgumentException("Paciente repetido.");
 			}		
 		}

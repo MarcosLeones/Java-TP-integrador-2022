@@ -99,7 +99,7 @@ public class Register extends HttpServlet {
 			
 			Persona per = paciente;
 			request.getSession().setAttribute("usuario", per);
-			request.getRequestDispatcher("WEB-INF/menuPaciente.html").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 			
 		}
 		

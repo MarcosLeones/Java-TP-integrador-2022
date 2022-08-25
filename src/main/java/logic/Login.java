@@ -2,7 +2,7 @@ package logic;
 
 import data.DataPaciente;
 import data.DataProfesional;
-import entities.Persona;
+import entities.*;
 
 public class Login {
 
@@ -12,17 +12,17 @@ public class Login {
 		DataProfesional dPro = new DataProfesional();
 		
 		p = dPac.getByEmailYPass(per);
-		if (p.getEmail() == per.getEmail() && p.getPassword() == per.getPassword()) {
-			return p;
+		if (p.getEmail().equals(per.getEmail()) && p.getPassword().equals(per.getPassword())) {
+			return (Paciente)p;
 		}
 		
 		p = dPro.getByEmailYPass(per);
-		if (p.getEmail() == per.getEmail() && p.getPassword() == per.getPassword()) {
-			return p;
+		if (p.getEmail().equals(per.getEmail()) && p.getPassword().equals(per.getPassword())) {
+			return (Profesional)p;
 		}
 		
 		p = null;
-		return p;
+		return (Persona)p;
 	}
 	
 	

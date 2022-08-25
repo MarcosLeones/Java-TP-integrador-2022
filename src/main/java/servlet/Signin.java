@@ -53,10 +53,13 @@ public class Signin extends HttpServlet {
 		
 		per = ctrlLogin.validate(per);
 		
+		request.getSession().setAttribute("usuario", per);
+		request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 		
+		/*
 		if (per instanceof Paciente) {
 			request.getSession().setAttribute("usuario", per);
-			request.getRequestDispatcher("WEB-INF/menuPaciente.html").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 		}
 		else if (per instanceof Profesional) {
 				request.getSession().setAttribute("usuario", per);
@@ -65,7 +68,7 @@ public class Signin extends HttpServlet {
 		
 		else {
 			request.getRequestDispatcher("WEB-INF/loginError.html").forward(request, response);;
-		}
+		}*/
 
 		
 		

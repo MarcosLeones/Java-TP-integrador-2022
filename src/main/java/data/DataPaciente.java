@@ -347,6 +347,9 @@ public class DataPaciente {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
+		p.setEmail("");
+		p.setPassword("");
+				
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from paciente where email=? and password=?");
 			stmt.setString(1, persona.getEmail());
