@@ -1,12 +1,10 @@
 package servlet;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.sql.Date;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +15,7 @@ import entities.Documento;
 import entities.ObraSocial;
 import entities.Paciente;
 import entities.Persona;
-import logic.ABMCPaciente;
+import logic.ABMCPersona;
 
 /**
  * Servlet implementation class Register
@@ -55,15 +53,17 @@ public class Register extends HttpServlet {
 		String email = request.getParameter("email");
 		String sexo = request.getParameter("sexo");
 		String domicilio = request.getParameter("domicilio");
-		int telefono = Integer.parseInt(request.getParameter("telefono"));
+		String telefono = request.getParameter("telefono");
+		String fechaNacStr = request.getParameter("fechaNac");
 		String password = request.getParameter("password");
 		String repeatPassword = request.getParameter("repeatPassword");
+		
 		
 		if (password.equals(repeatPassword)) {
 		
 			Paciente paciente = new Paciente();
 			Documento documento = new Documento();
-			LinkedList<ObraSocial> obrasSociales = new LinkedList<ObraSocial>();
+			ArrayList<ObraSocial> obrasSociales = new ArrayList<ObraSocial>();
 			
 			documento.setTipo(tipoDoc);
 			documento.setNro(nroDoc);		
@@ -76,30 +76,26 @@ public class Register extends HttpServlet {
 			paciente.setDomicilio(domicilio);
 			paciente.setTelefono(telefono);
 			paciente.setPassword(password);
+			paciente.setRol("paciente");
 			
-			//FECHA DE NACIMIENTO
-			/*
-			DateFormat df = new SimpleDateFormat("dd/MM/yyy");
-			java.util.Date utilDate = null;
+			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		    LocalDate fechaNac = LocalDate.parse(fechaNacStr, dateFormat);
+			paciente.setFechaNacimiento(fechaNac);
+			
 			try {
-				utilDate = df.parse(request.getParameter("fechaNac"));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			};
-			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-			paciente.setFechaNacimiento(sqlDate);
-			*/
-			//
+				ABMCPersona alta = new ABMCPersona();
+				alta.alta(paciente);
 			
+				Persona per = paciente;
+				request.getSession().setAttribute("usuario", per);
+				request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
+				
+			} catch(Exception ex) {
+				String msg = ex.getMessage();
+				request.setAttribute("mensaje", msg);
+				request.getRequestDispatcher("WEB-INF/registerError.jsp").forward(request, response);
+			}
 			
-			
-			ABMCPaciente alta = new ABMCPaciente();
-			alta.alta(paciente);
-			
-			Persona per = paciente;
-			request.getSession().setAttribute("usuario", per);
-			request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 			
 		}
 		

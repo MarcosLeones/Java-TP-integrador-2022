@@ -6,7 +6,7 @@ import data.*;
 import entities.*;
 
 public class ABMCPaciente {
-	
+	/*
 	private DataPaciente dataPac = new DataPaciente();
 	
 	
@@ -67,5 +67,5 @@ public class ABMCPaciente {
 	
 	public Paciente consultaUnoPorDocumento(Paciente pacienteConsulta) {
 		return dataPac.getByDocumento(pacienteConsulta);
-	}
+	}*/
 }

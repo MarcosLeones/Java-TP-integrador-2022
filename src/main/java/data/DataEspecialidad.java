@@ -3,16 +3,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import entities.Especialidad;
+import entities.Persona;
 import entities.Profesional;
 
 
 public class DataEspecialidad {
 
-	public LinkedList<Especialidad> getAll() {
+	public ArrayList<Especialidad> getAll() {
 
-		LinkedList<Especialidad> especialidades = new LinkedList<Especialidad>();
+		ArrayList<Especialidad> especialidades = new ArrayList<Especialidad>();
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -114,8 +116,8 @@ public class DataEspecialidad {
 	}
 
 	
-	public LinkedList<Especialidad> getByProfesional(Profesional profesional){
-		LinkedList<Especialidad> especialidades = new LinkedList<Especialidad>();
+	public ArrayList<Especialidad> getByProfesional(Persona profesional){
+		ArrayList<Especialidad> especialidades = new ArrayList<Especialidad>();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		

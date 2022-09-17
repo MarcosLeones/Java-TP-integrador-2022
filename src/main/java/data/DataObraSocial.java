@@ -2,19 +2,21 @@ package data;
 
 import entities.ObraSocial;
 import entities.Paciente;
+import entities.Persona;
 import entities.Profesional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class DataObraSocial {
 
-	public LinkedList<ObraSocial> getAll(){
+	public ArrayList<ObraSocial> getAll(){
 	
-	LinkedList<ObraSocial> obras = new LinkedList<ObraSocial>();
+	ArrayList<ObraSocial> obras = new ArrayList<ObraSocial>();
 	Statement stmt=null;
 	ResultSet rs=null;
 	
@@ -112,16 +114,16 @@ public class DataObraSocial {
 		}
 	}
 	
-	public LinkedList<ObraSocial> getByPaciente(Paciente paciente){
-		LinkedList<ObraSocial> obras = new LinkedList<ObraSocial>();
+	public ArrayList<ObraSocial> getByPersona(Persona persona){
+		ArrayList<ObraSocial> obras = new ArrayList<ObraSocial>();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"select id,nombre from obra_social inner join paciente_obra where legajo_paciente=?"
+					"select id,nombre from obra_social inner join persona_obra where legajo_persona=?"
 					);
-			stmt.setInt(1, paciente.getLegajo());
+			stmt.setInt(1, persona.getLegajo());
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				while(rs.next()) {
@@ -147,7 +149,7 @@ public class DataObraSocial {
 		return obras;
 	}
 	
-	
+	/*
 	public LinkedList<ObraSocial> getByProfesional(Profesional profesional){
 		LinkedList<ObraSocial> obras = new LinkedList<ObraSocial>();
 		PreparedStatement stmt=null;
@@ -182,7 +184,7 @@ public class DataObraSocial {
 		
 		return obras;
 	}
-	
+	*/
 	
 	public void update(ObraSocial obra) {
 		PreparedStatement stmt= null;

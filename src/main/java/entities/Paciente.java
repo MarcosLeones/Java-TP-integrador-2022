@@ -2,7 +2,7 @@ package entities;
 import java.sql.Date;
 
 public class Paciente extends Persona{
-	
+	/*
 	private int telefono;
 	private String domicilio;
 	private Date fechaNacimiento;
@@ -40,5 +40,5 @@ public class Paciente extends Persona{
 	public String toString() {
 		return this.getLegajo() + " - " +  this.getApellido() + ", " + this.getNombre() + " - " + this.getDocumento().getTipo() + " " + this.getDocumento().getNro();
 	}
-	
+	*/
 }

@@ -7,7 +7,7 @@ import entities.Paciente;
 import entities.Profesional;
 
 public class ABMCProfesional {
-
+/*
 	private DataProfesional dataProf= null;
 	
 	public ABMCProfesional() {
@@ -73,5 +73,5 @@ public class ABMCProfesional {
 
 	public Profesional consultaUno(Profesional profConsulta) {
 		return dataProf.getByLegajo(profConsulta);
-	}
+	}*/
 }

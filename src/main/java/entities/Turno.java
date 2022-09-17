@@ -4,12 +4,20 @@ import java.time.*;
 
 public class Turno {
 
+	private int id;
 	private LocalDate fecha;
 	private LocalTime hora;
 	private String estado;
-	private Paciente paciente;
+	private Persona paciente;
+	private Persona profesional;
 	
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public LocalDate getFecha() {
 		return fecha;
 	}
@@ -28,11 +36,17 @@ public class Turno {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	public Paciente getPaciente() {
+	public Persona getPaciente() {
 		return paciente;
 	}
-	public void setPaciente(Paciente paciente) {
+	public void setPaciente(Persona paciente) {
 		this.paciente = paciente;
+	}
+	public Persona getProfesional() {
+		return profesional;
+	}
+	public void setProfesional(Persona profesional) {
+		this.profesional = profesional;
 	}
 	
 	
