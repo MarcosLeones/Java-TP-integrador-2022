@@ -121,7 +121,9 @@ public class DataObraSocial {
 		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"select id,nombre from obra_social inner join persona_obra where legajo_persona=?"
+					"select id,nombre from obra_social os "
+					+ " inner join persona_obra po on os.id=po.id_obra "
+					+ " where legajo_persona=?"
 					);
 			stmt.setInt(1, persona.getLegajo());
 			rs=stmt.executeQuery();
@@ -149,43 +151,6 @@ public class DataObraSocial {
 		return obras;
 	}
 	
-	/*
-	public LinkedList<ObraSocial> getByProfesional(Profesional profesional){
-		LinkedList<ObraSocial> obras = new LinkedList<ObraSocial>();
-		PreparedStatement stmt=null;
-		ResultSet rs=null;
-		
-		try {
-			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"select id,nombre from obra_social inner join profesional_obra where legajo_profesional=?"
-					);
-			stmt.setInt(1, profesional.getLegajo());
-			rs=stmt.executeQuery();
-			if(rs!=null && rs.next()) {
-				while(rs.next()) {
-					ObraSocial o = new ObraSocial();
-					o.setId(rs.getInt("id"));
-					o.setNombre(rs.getString("nombre"));
-					
-					obras.add(o);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				if(rs!=null) {rs.close();}
-				if(stmt!=null) {stmt.close();}
-				DbConnector.getInstancia().releaseConn();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return obras;
-	}
-	*/
-	
 	public void update(ObraSocial obra) {
 		PreparedStatement stmt= null;
 		ResultSet keyResultSet=null;
@@ -193,7 +158,7 @@ public class DataObraSocial {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"update obra_social set  nombre values ? where id=?;"
+							"update obra_social set nombre=? where id=?;"
 							);
 			stmt.setString(1, obra.getNombre());
 			stmt.setInt(2, obra.getId());

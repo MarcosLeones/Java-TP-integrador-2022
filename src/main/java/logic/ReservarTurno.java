@@ -34,11 +34,16 @@ public class ReservarTurno {
 		return dataTur.getTurnosDisponibles(profesional, LocalDate.now().plusDays(1));
 	}
 	
-	public void registrarReserva(Turno turno, Persona pacienteActual) {
+	public void registrarReserva(Turno turno, Persona pacienteActual) throws Exception {
 		DataTurno dataTur = new DataTurno();
 		turno.setPaciente(pacienteActual);
 		turno.setEstado("reservado");
-		dataTur.updateTurno(turno);
+		try {
+		dataTur.reservarTurno(turno);
+		} 
+		catch (Exception ex) {
+			throw new Exception(ex.getMessage());
+		}		
 	}
 	
 	

@@ -15,16 +15,16 @@ import entities.Persona;
 import logic.ReservarTurno;
 
 /**
- * Servlet implementation class MostrarObrasYEsp
+ * Servlet implementation class MostrarProfesionales
  */
-@WebServlet({ "/MostrarObrasYEsp", "/mostrarobrasyesp" })
-public class MostrarObrasYEsp extends HttpServlet {
+@WebServlet("/MostrarProfesionales")
+public class MostrarProfesionales extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MostrarObrasYEsp() {
+    public MostrarProfesionales() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,20 +44,26 @@ public class MostrarObrasYEsp extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		
+//ESPECIALIDAD Y OBRA DE PRUEBA///////////////////		
+		Especialidad e = new Especialidad();
+		e.setId(1);
+		ObraSocial os = new ObraSocial();
+		os.setId(5);
+/////////////////
+		
 		Persona paciente = (Persona)request.getSession().getAttribute("usuario");
 		if (paciente.getRol() != "paciente") {
 			request.getRequestDispatcher("WEB-INF/sinPermiso.html").forward(request, response);
 			return;
 		}
 		
-		ReservarTurno rt = new ReservarTurno();
-		ArrayList<ObraSocial> obras = rt.getObrasSociales(paciente);
-		ArrayList<Especialidad> especialidades = rt.getEspecialidades();
 		
-		request.setAttribute("obras", obras);
-		request.setAttribute("especialidades", especialidades);
-		request.getRequestDispatcher("WEB-INF/seleccionarObraYEsp.jsp").forward(request, response);
+		ReservarTurno rt = new ReservarTurno();
+		ArrayList<Persona> profesionales = rt.getProfesionales(e, os);
+		request.setAttribute("profesionales", profesionales);
+		request.getRequestDispatcher("WEB-INF/seleccionarProfesional.jsp").forward(request, response);
 		return;
+		
 	}
 
 }

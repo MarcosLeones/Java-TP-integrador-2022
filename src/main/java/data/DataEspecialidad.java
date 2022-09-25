@@ -123,7 +123,9 @@ public class DataEspecialidad {
 		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"select id,nombre from especialidad inner join profesional_especialidad where legajo_profesional=?"
+					"select id,nombre from especialidad e "
+					+ " inner join profesional_especialidad pe on e.id=pe.id_especialidad "
+					+ " where legajo_profesional=?"
 					);
 			stmt.setInt(1, profesional.getLegajo());
 			rs=stmt.executeQuery();
@@ -188,7 +190,7 @@ public class DataEspecialidad {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"update especialidad set  nombre values ? where id=?;"
+							"update especialidad set nombre=? where id=?;"
 							);
 			stmt.setString(1, esp.getNombre());
 			stmt.setInt(2, esp.getId());

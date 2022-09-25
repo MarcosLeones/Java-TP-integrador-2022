@@ -1,30 +1,27 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entities.Especialidad;
-import entities.ObraSocial;
 import entities.Persona;
+import entities.Turno;
 import logic.ReservarTurno;
 
 /**
- * Servlet implementation class MostrarObrasYEsp
+ * Servlet implementation class RegistrarReserva
  */
-@WebServlet({ "/MostrarObrasYEsp", "/mostrarobrasyesp" })
-public class MostrarObrasYEsp extends HttpServlet {
+@WebServlet("/RegistrarReserva")
+public class RegistrarReserva extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MostrarObrasYEsp() {
+    public RegistrarReserva() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,6 +40,10 @@ public class MostrarObrasYEsp extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+//TURNO DE PRUEBA ///////
+		Turno turno = new Turno();
+		turno.setId(1);
+////////////////
 		
 		Persona paciente = (Persona)request.getSession().getAttribute("usuario");
 		if (paciente.getRol() != "paciente") {
@@ -50,13 +51,19 @@ public class MostrarObrasYEsp extends HttpServlet {
 			return;
 		}
 		
-		ReservarTurno rt = new ReservarTurno();
-		ArrayList<ObraSocial> obras = rt.getObrasSociales(paciente);
-		ArrayList<Especialidad> especialidades = rt.getEspecialidades();
+		//Turno turno = (Turno)request.getSession().getAttribute("turno");
 		
-		request.setAttribute("obras", obras);
-		request.setAttribute("especialidades", especialidades);
-		request.getRequestDispatcher("WEB-INF/seleccionarObraYEsp.jsp").forward(request, response);
+		ReservarTurno rt = new ReservarTurno();
+		try {
+			rt.registrarReserva(turno, paciente);
+		}
+		catch (Exception ex) {
+			request.setAttribute("mensajeError", ex.getMessage());
+			request.getRequestDispatcher("WEB-INF/errorInesperado.jsp").forward(request, response);
+			return;
+		}
+		
+		request.getRequestDispatcher("WEB-INF/reservaConfirmada.jsp").forward(request, response);
 		return;
 	}
 

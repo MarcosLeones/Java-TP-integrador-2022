@@ -20,9 +20,10 @@ public class DataTurno {
 		ResultSet rs = null;
 		try {
 			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM turno"
-				+ " WHERE estado='disponible' and legajo_profesional=? and fecha>=?");
+				+ " WHERE estado='disponible' and legajo_profesional=? and fecha>=? "
+				+ " ORDER BY fecha, hora ");
 			stmt.setInt(1, profesional.getLegajo());
-			stmt.setObject(1, fecha);
+			stmt.setObject(2, fecha);
 			rs=stmt.executeQuery();
 		
 			if (rs != null) {
@@ -66,8 +67,8 @@ public class DataTurno {
 
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"UPDATE turno SET (legajo_profesional, legajo_paciente, fecha, hora, estado) " 
-					+ " VALUES (?,?,?,?,?) WHERE id_turno=?"
+					"UPDATE turno SET legajo_profesional=?, legajo_paciente=?, fecha=?, hora=?, estado=? " 
+					+ " WHERE id_turno=?"
 					);
 			stmt.setInt(1, turno.getProfesional().getLegajo());			
 			stmt.setInt(2, turno.getPaciente().getLegajo());
@@ -135,4 +136,37 @@ public class DataTurno {
 	}
 	
 
+	public void reservarTurno(Turno turno) throws Exception {
+		PreparedStatement stmt= null;
+		ResultSet keyResultSet=null;
+
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement(
+					"UPDATE turno SET legajo_paciente = ?, estado=? " 
+					+ " WHERE id_turno=? and estado='disponible'"
+					);
+		
+			stmt.setInt(1, turno.getPaciente().getLegajo());
+			stmt.setString(2, turno.getEstado());
+			stmt.setInt(3, turno.getId());
+			
+			int filasAfectadas = stmt.executeUpdate();
+
+			if (filasAfectadas < 1) {
+				throw new Exception("Ha ocurrido un problema inesperado, el turno NO ha sido reservado.");
+			}
+			
+		}  catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(keyResultSet!=null)keyResultSet.close();
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
+	
 }

@@ -9,6 +9,9 @@
 <body>
 	<h1>Menú paciente</h1>
 	
-
+	<form action="MostrarObrasYEsp" method="post">
+		    <button type="submit">Reservar Turno</button>
+	</form>
+	
 </body>
 </html>

@@ -16,7 +16,7 @@ import entities.Profesional;
 public class DataPersona {
 
 	private DataObraSocial dos = new DataObraSocial();
-	private DataEspecialidad de = null;
+	private DataEspecialidad de = new DataEspecialidad();
 	
 	public ArrayList<Persona> getProfesionales(Especialidad esp, ObraSocial os){
 		
@@ -343,8 +343,9 @@ public class DataPersona {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"update persona set (tipo_doc, nro_doc, nombre, apellido, email, password, telefono, domicilio, fecha_nac, sexo, rol)"
-							+ " values(?,?,?,?,?,?,?,?,?,?,?) where legajo=?");
+							"update persona set tipo_doc=?, nro_doc=?, nombre=?, apellido=? " 
+							+", email=?, password=?, telefono=?, domicilio=?, fecha_nac=?, sexo=?, rol=?"
+							+ "  where legajo=?");
 			stmt.setString(1, p.getDocumento().getTipo());
 			stmt.setInt(2, p.getDocumento().getNro());
 			stmt.setString(3, p.getNombre());

@@ -9,22 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entities.Especialidad;
-import entities.ObraSocial;
 import entities.Persona;
+import entities.Turno;
 import logic.ReservarTurno;
 
 /**
- * Servlet implementation class MostrarObrasYEsp
+ * Servlet implementation class MostrarTurnosDisponibles
  */
-@WebServlet({ "/MostrarObrasYEsp", "/mostrarobrasyesp" })
-public class MostrarObrasYEsp extends HttpServlet {
+@WebServlet({ "/MostrarTurnosDisponibles", "/mostrarturnosdisponibles" })
+public class MostrarTurnosDisponibles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MostrarObrasYEsp() {
+    public MostrarTurnosDisponibles() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,21 +41,24 @@ public class MostrarObrasYEsp extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
+//PROFESIONAL DE PRUEBA //////
+		Persona profesional = new Persona();
+		profesional.setLegajo(18);
+//////////////////////		
 		
-		
+
 		Persona paciente = (Persona)request.getSession().getAttribute("usuario");
 		if (paciente.getRol() != "paciente") {
 			request.getRequestDispatcher("WEB-INF/sinPermiso.html").forward(request, response);
 			return;
 		}
 		
+		//Persona profesional = (Persona) request.getSession().getAttribute("profesional");
 		ReservarTurno rt = new ReservarTurno();
-		ArrayList<ObraSocial> obras = rt.getObrasSociales(paciente);
-		ArrayList<Especialidad> especialidades = rt.getEspecialidades();
-		
-		request.setAttribute("obras", obras);
-		request.setAttribute("especialidades", especialidades);
-		request.getRequestDispatcher("WEB-INF/seleccionarObraYEsp.jsp").forward(request, response);
+		ArrayList<Turno> turnos = rt.getTurnosDisponibles(profesional);
+		request.setAttribute("turnos", turnos);
+		request.getRequestDispatcher("WEB-INF/seleccionarTurno.jsp").forward(request, response);
 		return;
 	}
 
