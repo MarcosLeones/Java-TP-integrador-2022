@@ -169,4 +169,83 @@ public class DataTurno {
 		}
 	}
 	
+	
+	public void add(ArrayList<Turno> turnos) {
+		PreparedStatement stmt= null;
+		ResultSet keyResultSet=null;
+		
+		try {
+			
+			StringBuilder query = new StringBuilder("INSERT INTO turno (legajo_profesional, fecha, hora, estado) VALUES ");
+
+			if (turnos.size() <= 1000) {
+			    
+			    for (int i = 0; i < turnos.size(); i++)
+			        query.append("(?, ?, ?, ?), ");
+
+			    query = new StringBuilder(query.substring(1, query.length() - 1));
+
+			    stmt = DbConnector.getInstancia().getConn().prepareStatement(query.toString());
+
+			    for (int i = 0; i < turnos.size(); i++) {
+			    	stmt.setInt((i * 3) + 1, turnos.get(i).getProfesional().getLegajo());
+			    	stmt.setObject((i * 3) + 2, turnos.get(i).getFecha());
+			    	stmt.setObject((i * 3) + 3, turnos.get(i).getHora());
+			    	stmt.setString((i * 3) + 4, turnos.get(i).getEstado());
+			    }
+			    
+			    stmt.executeUpdate();		    
+			}
+
+		}  catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(keyResultSet!=null)keyResultSet.close();
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+    }
+
+	public LocalDate getFechaUltimoTurno(Persona profesional) {
+		LocalDate fecha = LocalDate.now();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select ifnull(max(fecha), curdate()) as fecha "
+					+ " from turno where legajo_profesional=? ");
+			stmt.setInt(1, profesional.getLegajo());
+			rs=stmt.executeQuery();
+			
+			if (rs != null) {
+				if (rs.next()) {
+					fecha = (LocalDate)rs.getDate("fecha").toLocalDate();
+				}				
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return fecha;
+	}
+	
+	
+	
 }

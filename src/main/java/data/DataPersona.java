@@ -9,7 +9,6 @@ import entities.Documento;
 import entities.Especialidad;
 import entities.ObraSocial;
 import entities.Persona;
-import entities.Profesional;
 
 
 
@@ -408,6 +407,61 @@ public class DataPersona {
             	e.printStackTrace();
             }
 		}
+	}
+
+	public ArrayList<Persona> getByRol(String rol) {
+		ArrayList<Persona> personas = new ArrayList<Persona>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM persona p"
+									+ " LEFT JOIN persona_obra po ON p.legajo=po.legajo_persona "
+									+ " LEFT JOIN profesional_especialidad pe ON p.legajo=pe.legajo_profesional "
+									+ " WHERE rol=?");
+			stmt.setString(1, rol);
+			rs=stmt.executeQuery();
+			if (rs != null) {
+				while (rs.next()) {
+					Persona p = new Persona();
+					Documento d = new Documento();
+
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+					p.setTelefono(rs.getString("telefono"));
+					p.setDomicilio(rs.getString("domicilio"));
+					p.setFechaNacimiento(rs.getDate("fecha_nac").toLocalDate());
+					p.setSexo(rs.getString("sexo"));
+					p.setRol(rs.getString("rol"));
+					p.setObrasSociales(dos.getByPersona(p));
+					p.setEspecialidades(de.getByProfesional(p));
+					personas.add(p);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return personas;
 	}
 	 
 
