@@ -3,16 +3,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import entities.Especialidad;
+import entities.Persona;
 import entities.Profesional;
 
 
 public class DataEspecialidad {
 
-	public LinkedList<Especialidad> getAll() {
+	public ArrayList<Especialidad> getAll() {
 
-		LinkedList<Especialidad> especialidades = new LinkedList<Especialidad>();
+		ArrayList<Especialidad> especialidades = new ArrayList<Especialidad>();
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -114,14 +116,16 @@ public class DataEspecialidad {
 	}
 
 	
-	public LinkedList<Especialidad> getByProfesional(Profesional profesional){
-		LinkedList<Especialidad> especialidades = new LinkedList<Especialidad>();
+	public ArrayList<Especialidad> getByProfesional(Persona profesional){
+		ArrayList<Especialidad> especialidades = new ArrayList<Especialidad>();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"select id,nombre from especialidad inner join profesional_especialidad where legajo_profesional=?"
+					"select id,nombre from especialidad e "
+					+ " inner join profesional_especialidad pe on e.id=pe.id_especialidad "
+					+ " where legajo_profesional=?"
 					);
 			stmt.setInt(1, profesional.getLegajo());
 			rs=stmt.executeQuery();
@@ -186,7 +190,7 @@ public class DataEspecialidad {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"update especialidad set  nombre values ? where id=?;"
+							"update especialidad set nombre=? where id=?;"
 							);
 			stmt.setString(1, esp.getNombre());
 			stmt.setInt(2, esp.getId());

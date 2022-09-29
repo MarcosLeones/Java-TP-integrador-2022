@@ -1,6 +1,6 @@
 package logic;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import data.DataObraSocial;
 import entities.ObraSocial;
 
@@ -11,7 +11,7 @@ public class ABMCObraSocial {
 	
 	public void alta(ObraSocial obraAlta) 
 	{
-		LinkedList<ObraSocial> obrasActuales = dataObSoc.getAll();
+		ArrayList<ObraSocial> obrasActuales = dataObSoc.getAll();
 		
 		for (ObraSocial o: obrasActuales) {
 			if (o.getNombre()== obraAlta.getNombre()) {
@@ -23,7 +23,7 @@ public class ABMCObraSocial {
 	
 	public void baja(ObraSocial obraBaja)  throws IllegalArgumentException {
 		
-		LinkedList<ObraSocial> obrasActuales = new LinkedList<ObraSocial>(dataObSoc.getAll()); 
+		ArrayList<ObraSocial> obrasActuales = new ArrayList<ObraSocial>(dataObSoc.getAll()); 
 		
 		boolean existe = false;
 		for (ObraSocial os: obrasActuales) {
@@ -41,7 +41,7 @@ public class ABMCObraSocial {
 	}
 	
 	public void modificacion(ObraSocial obraModif) {
-		LinkedList<ObraSocial> obrasActuales = new LinkedList<ObraSocial>(dataObSoc.getAll()); 
+		ArrayList<ObraSocial> obrasActuales = new ArrayList<ObraSocial>(dataObSoc.getAll()); 
 		boolean existe = false;
 		for (ObraSocial os: obrasActuales) {
 			if (os.getId() == obraModif.getId()) {
@@ -57,7 +57,7 @@ public class ABMCObraSocial {
 		}
 	}
 
-	public LinkedList<ObraSocial> consultaTodos(){
+	public ArrayList<ObraSocial> consultaTodos(){
 		return dataObSoc.getAll();
 	}
 	

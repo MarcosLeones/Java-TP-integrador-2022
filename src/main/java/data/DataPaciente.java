@@ -13,7 +13,7 @@ import entities.Persona;
 public class DataPaciente {
 	
 	private DataObraSocial dos = new DataObraSocial();
-
+/*
 	public LinkedList<Paciente> getAll(){
 		
 		LinkedList<Paciente> pacientes = new LinkedList<Paciente>();
@@ -393,5 +393,5 @@ public class DataPaciente {
 		}
 		
 		return p;
-	}
+	}*/
 }

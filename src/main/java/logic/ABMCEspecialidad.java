@@ -1,6 +1,6 @@
 package logic;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import data.DataEspecialidad;
 import entities.Especialidad;
 
@@ -14,7 +14,7 @@ public class ABMCEspecialidad {
 	}
 	
 	public void alta(Especialidad espAlta) {
-		LinkedList<Especialidad> especialidadesActuales = dataEsp.getAll();
+		ArrayList<Especialidad> especialidadesActuales = dataEsp.getAll();
 		
 		for (Especialidad e: especialidadesActuales) {
 			if (e.getNombre()== espAlta.getNombre()) {
@@ -25,7 +25,7 @@ public class ABMCEspecialidad {
 	}
 	
 	public void baja(Especialidad espBaja) {
-		LinkedList<Especialidad> especialidadesActuales = new LinkedList<Especialidad>(dataEsp.getAll()); 
+		ArrayList<Especialidad> especialidadesActuales = new ArrayList<Especialidad>(dataEsp.getAll()); 
 		
 		boolean existe = false;
 		for (Especialidad e: especialidadesActuales) {
@@ -43,7 +43,7 @@ public class ABMCEspecialidad {
 	}
 	
 	public void modificacion(Especialidad espModif) {
-		LinkedList<Especialidad> especialidadesActuales = new LinkedList<Especialidad>(dataEsp.getAll()); 
+		ArrayList<Especialidad> especialidadesActuales = new ArrayList<Especialidad>(dataEsp.getAll()); 
 		boolean existe = false;
 		for (Especialidad e: especialidadesActuales) {
 			if (e.getId() == espModif.getId()) {
@@ -63,7 +63,7 @@ public class ABMCEspecialidad {
 		return dataEsp.getById(esp);
 	}
 	
-	public LinkedList<Especialidad> consultaTodos(){
+	public ArrayList<Especialidad> consultaTodos(){
 		return dataEsp.getAll();
 	}
 }
