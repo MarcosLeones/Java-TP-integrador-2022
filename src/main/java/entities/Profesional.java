@@ -25,4 +25,8 @@ public class Profesional  extends Persona{
 		}
 	}
 	
+	public void setEspecialidades(LinkedList<Especialidad> especialidades) {
+		this.especialidades = especialidades;
+	}
+	
 }

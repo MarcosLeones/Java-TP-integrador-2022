@@ -36,4 +36,9 @@ public class Paciente extends Persona{
 		this.sexo = sexo;
 	}
 
+	
+	public String toString() {
+		return this.getLegajo() + " - " +  this.getApellido() + ", " + this.getNombre() + " - " + this.getDocumento().getTipo() + " " + this.getDocumento().getNro();
+	}
+	
 }

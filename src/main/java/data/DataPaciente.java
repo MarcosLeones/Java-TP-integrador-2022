@@ -7,6 +7,7 @@ import java.sql.*;
 import entities.Documento;
 import entities.ObraSocial;
 import entities.Paciente;
+import entities.Persona;
 
 
 public class DataPaciente {
@@ -72,24 +73,26 @@ public class DataPaciente {
 		ResultSet rs = null;
 		
 		try {
-			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from paciente where id=?");
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from paciente where legajo=?");
 			stmt.setInt(1, paciente.getLegajo());
 			rs=stmt.executeQuery();
 			
 			if (rs != null) {
-				Documento d = new Documento();
-				p.setLegajo(rs.getInt("legajo"));
-				d.setTipo(rs.getString("tipo_doc"));
-				d.setNro(rs.getInt("nro_doc"));
-				p.setDocumento(d);
-				p.setNombre(rs.getString("nombre"));
-				p.setApellido(rs.getString("apellido"));
-				p.setEmail(rs.getString("email"));
-				p.setTelefono(rs.getInt("telefono"));
-				p.setDomicilio(rs.getString("domicilio"));
-				p.setFechaNacimiento(rs.getDate("fecha_nac"));
-				p.setSexo(rs.getString("sexo"));
-				p.setObrasSociales(dos.getByPaciente(p));
+				if (rs.next()) {
+					Documento d = new Documento();
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+					p.setTelefono(rs.getInt("telefono"));
+					p.setDomicilio(rs.getString("domicilio"));
+					p.setFechaNacimiento(rs.getDate("fecha_nac"));
+					p.setSexo(rs.getString("sexo"));
+					p.setObrasSociales(dos.getByPaciente(p));
+				}
 					
 			}
 
@@ -122,7 +125,7 @@ public class DataPaciente {
 					prepareStatement(
 							"insert into paciente (tipo_doc, nro_doc, nombre, apellido, email, password,"
 							+ " telefono, domicilio, fecha_nac, sexo)"
-							+ " values (?,?,?,?,?,?,?,?,?);",
+							+ " values (?,?,?,?,?,?,?,?,?,?);",
 							PreparedStatement.RETURN_GENERATED_KEYS
 							);
 			stmt.setString(1, p.getDocumento().getTipo());
@@ -243,7 +246,7 @@ public class DataPaciente {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"delete from paciente_obra where legajo=?"
+							"delete from paciente_obra where legajo_paciente=?"
 							);
 			stmt.setInt(1, p.getLegajo());
 			
@@ -289,4 +292,106 @@ public class DataPaciente {
 		}
 	}
 	
+	
+	public Paciente getByDocumento(Paciente paciente) {
+		Paciente p = new Paciente();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from paciente where tipo_doc=? and nro_doc=? limit 1");
+			stmt.setString(1, paciente.getDocumento().getTipo());
+			stmt.setInt(2, paciente.getDocumento().getNro());
+			rs=stmt.executeQuery();
+			
+			if (rs != null) {
+				if (rs.next()) {
+					Documento d = new Documento();
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+					p.setTelefono(rs.getInt("telefono"));
+					p.setDomicilio(rs.getString("domicilio"));
+					p.setFechaNacimiento(rs.getDate("fecha_nac"));
+					p.setSexo(rs.getString("sexo"));
+					p.setObrasSociales(dos.getByPaciente(p));
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
+	}
+	
+	public Paciente getByEmailYPass(Persona persona) {
+		Paciente p = new Paciente();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		p.setEmail("");
+		p.setPassword("");
+				
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from paciente where email=? and password=?");
+			stmt.setString(1, persona.getEmail());
+			stmt.setString(2, persona.getPassword());
+			rs=stmt.executeQuery();
+			
+			if (rs != null) {
+				if (rs.next()) {
+					Documento d = new Documento();
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+					p.setTelefono(rs.getInt("telefono"));
+					p.setDomicilio(rs.getString("domicilio"));
+					p.setFechaNacimiento(rs.getDate("fecha_nac"));
+					p.setSexo(rs.getString("sexo"));
+					p.setObrasSociales(dos.getByPaciente(p));
+				}
+					
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
+	}
 }

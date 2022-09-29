@@ -149,4 +149,65 @@ public class DataEspecialidad {
 		return especialidades;
 	}
 	
+	
+	public void delete(Especialidad esp) {
+		
+		PreparedStatement stmt= null;
+		ResultSet keyResultSet=null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().
+					prepareStatement(
+							"delete from especialidad where id=?;"
+							);
+			stmt.setInt(1, esp.getId());
+			stmt.executeUpdate();
+			
+			
+		}  catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(keyResultSet!=null)keyResultSet.close();
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
+
+	
+	public void update(Especialidad esp) {
+		
+		PreparedStatement stmt= null;
+		ResultSet keyResultSet=null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().
+					prepareStatement(
+							"update especialidad set  nombre values ? where id=?;"
+							);
+			stmt.setString(1, esp.getNombre());
+			stmt.setInt(2, esp.getId());
+			stmt.executeUpdate();
+			
+			keyResultSet=stmt.getGeneratedKeys();
+            if(keyResultSet!=null && keyResultSet.next()){
+                esp.setId(keyResultSet.getInt("id"));
+            }
+
+			
+		}  catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(keyResultSet!=null)keyResultSet.close();
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
 }
