@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import entities.Persona;
@@ -181,19 +182,20 @@ public class DataTurno {
 			if (turnos.size() <= 1000) {
 			    
 			    for (int i = 0; i < turnos.size(); i++)
-			        query.append("(?, ?, ?, ?), ");
-
-			    query = new StringBuilder(query.substring(1, query.length() - 1));
+			    {
+			    	query.append("(?, ?, ?, ?) ");
+			    	if (i != (turnos.size() - 1)) query.append(","); 
+			    }
+			    //query = new StringBuilder(query.substring(0, query.length() - 1));
 
 			    stmt = DbConnector.getInstancia().getConn().prepareStatement(query.toString());
 
-			    for (int i = 0; i < turnos.size(); i++) {
-			    	stmt.setInt((i * 3) + 1, turnos.get(i).getProfesional().getLegajo());
-			    	stmt.setObject((i * 3) + 2, turnos.get(i).getFecha());
-			    	stmt.setObject((i * 3) + 3, turnos.get(i).getHora());
-			    	stmt.setString((i * 3) + 4, turnos.get(i).getEstado());
-			    }
-			    
+			    for (int i = 0; i < turnos.size(); i++) {		    	
+			    	stmt.setInt((i * 4) + 1, turnos.get(i).getProfesional().getLegajo());			    	
+			    	stmt.setObject((i * 4) + 2, turnos.get(i).getFecha());			    	
+			    	stmt.setObject((i * 4) + 3, turnos.get(i).getHora());			    	
+			    	stmt.setString((i * 4) + 4, turnos.get(i).getEstado());			    	
+			    }			    
 			    stmt.executeUpdate();		    
 			}
 
@@ -247,5 +249,53 @@ public class DataTurno {
 	}
 	
 	
+	public ArrayList<Turno> getTurnosCreados(Persona profesional){
+		
+		ArrayList<Turno> turnos = new ArrayList<Turno>();
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM turno"
+				+ " WHERE estado='creado' and legajo_profesional=? and fecha>=? "
+				+ " ORDER BY fecha, hora ");
+			stmt.setInt(1, profesional.getLegajo());
+			stmt.setObject(2, LocalDate.now());
+			rs=stmt.executeQuery();
+		
+			if (rs != null) {
+				while (rs.next()) {
+					Turno t = new Turno();
+					Persona p = new Persona();
+					p = dp.getByLegajo(rs.getInt("legajo_profesional"));
+					t.setProfesional(p);
+					t.setId(rs.getInt("id_turno"));
+					t.setFecha(rs.getDate("fecha").toLocalDate());
+					t.setHora(rs.getTime("hora").toLocalTime());
+					t.setEstado(rs.getString("estado"));
+
+					turnos.add(t);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return turnos;
+	}
 	
 }
