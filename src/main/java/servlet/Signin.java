@@ -43,7 +43,9 @@ public class Signin extends HttpServlet {
 		
 		//response.getWriter().append(request.getParameter("email")).append(request.getParameter("password"));
 		
-		
+		//if(request.getParameter("ingresar")!=null) {
+		//	System.out.println("ingresar");
+		//}
 		/*
 		Persona per = new Persona();
 		Login ctrlLogin = new Login();
@@ -53,16 +55,29 @@ public class Signin extends HttpServlet {
 		
 		per = ctrlLogin.validate(per);
 		*/
-/////USURARIO DE PRUEBA	//
+		/*
+/////USURARIO DE PRUEBA	PACIENTE//
 		Persona prueba = new Persona();
 		prueba.setLegajo(17);
 		prueba.setRol("paciente");
 		request.getSession().setAttribute("usuario", prueba);
 ////////////////////////////		
 		//request.getSession().setAttribute("usuario", per);
+		
 		request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 		return;
+		*/
 		
+/////USURARIO DE PRUEBA	PROFESIONAL//
+		Persona prueba = new Persona();
+		prueba.setLegajo(18);
+		prueba.setRol("profesional");
+		request.getSession().setAttribute("usuario", prueba);
+////////////////////////////	
+ 
+		//request.getSession().setAttribute("usuario", per);
+		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
+		return;
 		
 	}
 

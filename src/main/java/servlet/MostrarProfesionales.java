@@ -43,13 +43,22 @@ public class MostrarProfesionales extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		
+		/*
 //ESPECIALIDAD Y OBRA DE PRUEBA///////////////////		
 		Especialidad e = new Especialidad();
 		e.setId(1);
 		ObraSocial os = new ObraSocial();
 		os.setId(5);
 /////////////////
+		*/
+		
+		int idEsp = Integer.parseInt(request.getParameter("esp"));
+		int idOS = Integer.parseInt(request.getParameter("os"));		
+		Especialidad e = new Especialidad();
+		e.setId(idEsp);
+		ObraSocial os = new ObraSocial();
+		os.setId(idOS);
+		
 		
 		Persona paciente = (Persona)request.getSession().getAttribute("usuario");
 		if (paciente.getRol() != "paciente") {
@@ -60,9 +69,17 @@ public class MostrarProfesionales extends HttpServlet {
 		
 		ReservarTurno rt = new ReservarTurno();
 		ArrayList<Persona> profesionales = rt.getProfesionales(e, os);
-		request.setAttribute("profesionales", profesionales);
-		request.getRequestDispatcher("WEB-INF/seleccionarProfesional.jsp").forward(request, response);
-		return;
+		
+		if (profesionales.size() == 0) {
+			request.setAttribute("mensaje", "No se encontraron profesionales.");
+			request.getRequestDispatcher("WEB-INF/errorMensaje.jsp").forward(request, response);
+			return;
+		}
+		else {
+			request.setAttribute("profesionales", profesionales);
+			request.getRequestDispatcher("WEB-INF/seleccionarProfesional.jsp").forward(request, response);
+			return;
+		}
 		
 	}
 

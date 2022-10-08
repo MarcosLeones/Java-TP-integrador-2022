@@ -33,7 +33,7 @@ public class MostrarTurnosDisponibles extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.getWriter().append("Served at: ").append(request.getContextPath());	
 	}
 
 	/**
@@ -42,10 +42,16 @@ public class MostrarTurnosDisponibles extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
+		/*
 //PROFESIONAL DE PRUEBA //////
 		Persona profesional = new Persona();
-		profesional.setLegajo(18);
+		profesional.setLegajo(19);
 //////////////////////		
+*/
+		
+		int legajoProf = Integer.parseInt(request.getParameter("prof"));
+		Persona profesional = new Persona();
+		profesional.setLegajo(legajoProf);
 		
 
 		Persona paciente = (Persona)request.getSession().getAttribute("usuario");
@@ -57,9 +63,17 @@ public class MostrarTurnosDisponibles extends HttpServlet {
 		//Persona profesional = (Persona) request.getSession().getAttribute("profesional");
 		ReservarTurno rt = new ReservarTurno();
 		ArrayList<Turno> turnos = rt.getTurnosDisponibles(profesional);
-		request.setAttribute("turnos", turnos);
-		request.getRequestDispatcher("WEB-INF/seleccionarTurno.jsp").forward(request, response);
-		return;
+		
+		if (turnos.size() == 0) {
+			request.setAttribute("mensaje", "El profesional no tiene turnos disponibles.");
+			request.getRequestDispatcher("WEB-INF/errorMensaje.jsp").forward(request, response);
+			return;
+		}
+		else {
+			request.setAttribute("turnos", turnos);
+			request.getRequestDispatcher("WEB-INF/seleccionarTurno.jsp").forward(request, response);
+			return;
+		}
 	}
 
 }

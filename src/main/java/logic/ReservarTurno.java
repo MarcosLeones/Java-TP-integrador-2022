@@ -36,10 +36,11 @@ public class ReservarTurno {
 	
 	public void registrarReserva(Turno turno, Persona pacienteActual) throws Exception {
 		DataTurno dataTur = new DataTurno();
+		
 		turno.setPaciente(pacienteActual);
 		turno.setEstado("reservado");
 		try {
-		dataTur.reservarTurno(turno);
+			dataTur.reservarTurno(turno);
 		} 
 		catch (Exception ex) {
 			throw new Exception(ex.getMessage());

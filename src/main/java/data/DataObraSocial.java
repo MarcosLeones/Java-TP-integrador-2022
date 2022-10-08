@@ -127,7 +127,7 @@ public class DataObraSocial {
 					);
 			stmt.setInt(1, persona.getLegajo());
 			rs=stmt.executeQuery();
-			if(rs!=null && rs.next()) {
+			if(rs!=null) {
 				while(rs.next()) {
 					ObraSocial o = new ObraSocial();
 					o.setId(rs.getInt("id"));
