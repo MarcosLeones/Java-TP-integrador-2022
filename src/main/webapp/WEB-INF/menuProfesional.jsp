@@ -10,17 +10,14 @@
 
 	<h1>Menú Profesional</h1>
 	
-	<form action="AltaEspecialidad" method="post">
-		    <button type="submit">Alta Especialidad</button>  
-	</form>
-	
 	<form action="Especialidades" method="post">
 		    <button type="submit">Especialidades</button>  
 	</form>
 	
-	<form action="AltaObraSocial" method="post">
-		    <button type="submit">Alta Obra Social</button>  
+	<form action="ObrasSociales" method="post">
+		    <button type="submit">Obras Sociales</button>  
 	</form>
+	
 	
 </body>
 </html>

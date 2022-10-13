@@ -1,20 +1,19 @@
-<%@page import="entities.Especialidad"%>
+<%@page import="entities.ObraSocial"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Especialidades</title>
+<title>Obras Sociales</title>
 </head>
 <body>
-	
-	<form action="ModificacionEspecialidad" method="post">
+	<form action="ModificacionObraSocial" method="post">
 	<%
-		java.util.ArrayList<Especialidad> especialidades = (java.util.ArrayList<Especialidad>)request.getAttribute("especialidades");
-		for(Especialidad e : especialidades){
+		java.util.ArrayList<ObraSocial> obras = (java.util.ArrayList<ObraSocial>)request.getAttribute("obras");
+		for(ObraSocial os : obras){
 	%>
-			<input type="radio" name="seleccion" value=<%=e.getId()%>><label for="seleccion"><%=e.getNombre()%></label><br/>
+			<input type="radio" name="seleccion" value=<%=os.getId()%>><label for="seleccion"><%=os.getNombre()%></label><br/>
 	<%}%>
 	
 	<br/>
@@ -26,6 +25,5 @@
 	
 		<button type="submit">Siguiente</button>
 	</form>
-	
 </body>
 </html>
