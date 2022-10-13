@@ -18,6 +18,10 @@
 		    <button type="submit">Obras Sociales</button>  
 	</form>
 	
+	<form action="Personas" method="post">
+		    <button type="submit">Personas</button>  
+	</form>
+	
 	
 </body>
 </html>
