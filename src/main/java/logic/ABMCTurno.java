@@ -61,15 +61,13 @@ public class ABMCTurno {
 	
 	public ArrayList<Turno> getTurnosCreados(Persona profesional){
 		DataTurno dt = new DataTurno();
-		return dt.getTurnosCreados(profesional);
+		return dt.getTurnosCreados(profesional, LocalDate.now());
 	}
 	
 	public void registrarTurnosDisponibles(ArrayList<Turno> turnos) {
 		DataTurno dt = new DataTurno();
-		for (Turno t: turnos) {
-			t.setEstado("disponible");
-			dt.updateTurno(t);
-		}
+		dt.updateDisponible(turnos);
+		
 	}
 	
 	

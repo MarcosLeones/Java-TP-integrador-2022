@@ -11,10 +11,15 @@ public class ABMCObraSocial {
 	
 	public void alta(ObraSocial obraAlta) 
 	{
-		ArrayList<ObraSocial> obrasActuales = dataObSoc.getAll();
+		//Valida que el nombre no esté vacío
+		if (obraAlta.getNombre().equals("") || obraAlta.getNombre() == null) {
+			throw new IllegalArgumentException("El nombre no puede estar vacío");
+		}
 		
+		//Valida que no esté repetida
+		ArrayList<ObraSocial> obrasActuales = dataObSoc.getAll();
 		for (ObraSocial o: obrasActuales) {
-			if (o.getNombre()== obraAlta.getNombre()) {
+			if (o.getNombre().equals(obraAlta.getNombre())) {
 				throw new IllegalArgumentException("Obra Social repetida");
 			}
 		}

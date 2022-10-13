@@ -9,13 +9,19 @@
 </head>
 <body>
 
-	<h1>Turnos</h1>
-	<%
-	java.util.ArrayList<Turno> turnos = (java.util.ArrayList<Turno>)request.getAttribute("turnos");
-	
-	for(Turno t : turnos){
-	%>
-		<p><%=t.getFecha()%><%=t.getHora()%></p>
-	<%}%>
+	<form action="MarcarDisponible" method="post">
+		<h1>Turnos</h1>
+		<ul>
+		<%
+		java.util.ArrayList<Turno> turnos = (java.util.ArrayList<Turno>)request.getAttribute("turnos");
+		
+		for(Turno t : turnos){
+		%>	<li>
+				<input type="checkbox" name="turnos" value="<%=t.getId()%>"><%=t.getFecha()%> - <%=t.getHora()%>
+			</li>
+		<%}%>
+		</ul>
+		<button type="submit">Guardar</button>
+	</form>
 </body>
 </html>

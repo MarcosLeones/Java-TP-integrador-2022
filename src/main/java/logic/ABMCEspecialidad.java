@@ -14,10 +14,15 @@ public class ABMCEspecialidad {
 	}
 	
 	public void alta(Especialidad espAlta) {
-		ArrayList<Especialidad> especialidadesActuales = dataEsp.getAll();
+		//Valida que el nombre no esté vacío
+		if (espAlta.getNombre().equals("") || espAlta.getNombre() == null) {
+			throw new IllegalArgumentException("El nombre no puede estar vacío");
+		}
 		
+		//Valida que no esté repetida
+		ArrayList<Especialidad> especialidadesActuales = dataEsp.getAll();
 		for (Especialidad e: especialidadesActuales) {
-			if (e.getNombre()== espAlta.getNombre()) {
+			if (e.getNombre().equals(espAlta.getNombre())) {
 				throw new IllegalArgumentException("Especialidad repetida");
 			}
 		}

@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import entities.Persona;
@@ -249,7 +248,7 @@ public class DataTurno {
 	}
 	
 	
-	public ArrayList<Turno> getTurnosCreados(Persona profesional){
+	public ArrayList<Turno> getTurnosCreados(Persona profesional, LocalDate fecha){
 		
 		ArrayList<Turno> turnos = new ArrayList<Turno>();
 		
@@ -260,7 +259,7 @@ public class DataTurno {
 				+ " WHERE estado='creado' and legajo_profesional=? and fecha>=? "
 				+ " ORDER BY fecha, hora ");
 			stmt.setInt(1, profesional.getLegajo());
-			stmt.setObject(2, LocalDate.now());
+			stmt.setObject(2, fecha);
 			rs=stmt.executeQuery();
 		
 			if (rs != null) {
@@ -298,4 +297,31 @@ public class DataTurno {
 		return turnos;
 	}
 	
+	
+	public void updateDisponible(ArrayList<Turno> turnos) {
+		PreparedStatement stmt= null;
+		ResultSet keyResultSet=null;
+
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement(
+					"UPDATE turno SET estado=? WHERE id_turno=?");
+			for (Turno t : turnos) {
+				stmt.setString(1, t.getEstado());
+				stmt.setInt(2, t.getId());
+				stmt.addBatch();
+			}
+			stmt.executeBatch();			
+			
+		}  catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(keyResultSet!=null)keyResultSet.close();
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
 }
