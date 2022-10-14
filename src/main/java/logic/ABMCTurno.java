@@ -71,4 +71,10 @@ public class ABMCTurno {
 	}
 	
 	
+	public ArrayList<Turno> mostrarReservados(Persona paciente){
+		DataTurno dt = new DataTurno();
+		return dt.getReservas(paciente);
+	}
+	
+	
 }

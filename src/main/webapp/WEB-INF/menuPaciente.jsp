@@ -13,5 +13,9 @@
 		    <button type="submit">Reservar Turno</button>
 	</form>
 	
+	<form action="MostrarReservas" method="post">
+		    <button type="submit">Mis Turnos Reservados</button>
+	</form>
+	
 </body>
 </html>

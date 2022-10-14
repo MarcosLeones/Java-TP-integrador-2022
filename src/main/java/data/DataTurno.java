@@ -98,16 +98,18 @@ public class DataTurno {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM turno WHERE legajo_paciente=? ");
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM turno WHERE legajo_paciente=? order by fecha, hora");
 			stmt.setInt(1, paciente.getLegajo());
 			rs=stmt.executeQuery();
 		
 			if (rs != null) {
 				while (rs.next()) {
 					Turno t = new Turno();
-					Persona p = new Persona();
+					Persona p;
 					p = dp.getByLegajo(rs.getInt("legajo_profesional"));
 					t.setProfesional(p);
+					p= dp.getByLegajo(paciente.getLegajo());
+					t.setPaciente(p);
 					t.setId(rs.getInt("id_turno"));
 					t.setFecha(rs.getDate("fecha").toLocalDate());
 					t.setHora(rs.getTime("hora").toLocalTime());

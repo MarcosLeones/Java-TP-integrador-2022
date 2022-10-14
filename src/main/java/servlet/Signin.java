@@ -55,7 +55,9 @@ public class Signin extends HttpServlet {
 		
 		per = ctrlLogin.validate(per);
 		*/
-		/*
+/////////////////////
+String rol = request.getParameter("rol");
+if (rol.equals("paciente")) {
 /////USURARIO DE PRUEBA	PACIENTE//
 		Persona prueba = new Persona();
 		prueba.setLegajo(17);
@@ -66,7 +68,8 @@ public class Signin extends HttpServlet {
 		
 		request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 		return;
-		*/
+}
+else {
 		
 /////USURARIO DE PRUEBA	PROFESIONAL//
 		Persona prueba = new Persona();
@@ -78,7 +81,7 @@ public class Signin extends HttpServlet {
 		//request.getSession().setAttribute("usuario", per);
 		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
 		return;
-		
+}		
 	}
 
 }
