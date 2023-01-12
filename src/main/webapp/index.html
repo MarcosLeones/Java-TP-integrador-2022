@@ -5,7 +5,7 @@
 	<title>Inicio</title>
 </head>
 <body>
-
+<!-- 
 	<h1>Ingreso</h1>
 	<form action="Signin" method="post">
 		<div class="container">
@@ -22,16 +22,25 @@
 		<label><b>No tengo cuenta: </b></label>
 		<a href="register.html">Registrarme</a>
 	</div>	
-	
+ -->	
 	
 	<form action="CrearTurnos" method="post">
-		    <button type="submit">Crear turnos</button>  
+		<button type="submit">Crear turnos</button>  
 	</form>
 	
 	<form action="MostrarTurnosCreados" method="post">
-		    <button type="submit">Marcar turnos disponibles</button>  
+		<button type="submit">Marcar turnos disponibles</button>  
 	</form>
 	
+	<form action="Signin" method="post">
+		<input type="hidden" name="rol" value="profesional">
+		<button type="submit">Ingresar como Profesional</button>  
+	</form>
+	
+	<form action="Signin" method="post">
+		<input type="hidden" name="rol" value="paciente">
+		<button type="submit">Ingresar como Paciente</button>  
+	</form>
 	
 </body>
 </html>
