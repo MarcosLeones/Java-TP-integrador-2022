@@ -3,6 +3,7 @@ package data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -71,7 +72,12 @@ public class DataTurno {
 					+ " WHERE id_turno=?"
 					);
 			stmt.setInt(1, turno.getProfesional().getLegajo());			
-			stmt.setInt(2, turno.getPaciente().getLegajo());
+			//stmt.setInt(2, turno.getPaciente().getLegajo());
+			if (turno.getPaciente().getLegajo() == 0) {
+				stmt.setNull(2, Types.INTEGER);
+			} else {
+				stmt.setInt(2, turno.getPaciente().getLegajo());
+			}
 			stmt.setObject(3, turno.getFecha());
 			stmt.setObject(4, turno.getHora());
 			stmt.setString(5, turno.getEstado());
@@ -145,7 +151,7 @@ public class DataTurno {
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"UPDATE turno SET legajo_paciente = ?, estado=? " 
-					+ " WHERE id_turno=? and estado='disponible'"
+					+ " WHERE id_turno=? and estado='disponible' and legajo_paciente is null"
 					);
 		
 			stmt.setInt(1, turno.getPaciente().getLegajo());
@@ -325,5 +331,43 @@ public class DataTurno {
             	e.printStackTrace();
             }
 		}
+	}
+	
+	public Turno getById(Turno turno) {
+		Turno t = new Turno();
+		
+		PreparedStatement stmt=null;
+		ResultSet rs=null;
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement(
+					"select * from turno where id_turno=?"
+					);
+			stmt.setInt(1, turno.getId());
+			rs=stmt.executeQuery();
+			if(rs!=null && rs.next()) {
+				t.setId(rs.getInt("id_turno"));
+				t.setFecha(rs.getDate("fecha").toLocalDate());
+				t.setHora(rs.getTime("hora").toLocalTime());
+				t.setEstado(rs.getString("estado"));
+				Persona p = new Persona();
+				p = dp.getByLegajo(rs.getInt("legajo_profesional"));
+				t.setProfesional(p);
+				p = dp.getByLegajo(rs.getInt("legajo_paciente"));
+				t.setPaciente(p);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) {rs.close();}
+				if(stmt!=null) {stmt.close();}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return t;
+	
 	}
 }

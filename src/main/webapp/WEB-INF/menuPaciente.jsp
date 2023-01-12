@@ -17,5 +17,9 @@
 		    <button type="submit">Mis Turnos Reservados</button>
 	</form>
 	
+	<form action="MostrarReservasCancelables" method="post">
+		    <button type="submit">Cancelar Reserva de Turno</button>
+	</form>
+	
 </body>
 </html>
