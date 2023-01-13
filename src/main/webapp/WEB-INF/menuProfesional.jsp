@@ -22,6 +22,9 @@
 		    <button type="submit">Personas</button>  
 	</form>
 	
+	<form action="MostrarTurnosDelDia" method="post">
+		    <button type="submit">Registrar Atención</button>  
+	</form>
 	
 </body>
 </html>
