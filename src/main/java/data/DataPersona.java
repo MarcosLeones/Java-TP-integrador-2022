@@ -465,4 +465,55 @@ public class DataPersona {
 	}
 	 
 
+	public Persona getByEmailPassword(Persona per) {
+		Persona p = new Persona();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement("select * from persona where email=? and password=? ");
+			stmt.setString(1, per.getEmail());
+			stmt.setString(2, per.getPassword());
+			rs=stmt.executeQuery();
+			
+			if (rs != null) {
+				if (rs.next()) {
+					Documento d = new Documento();
+					p.setLegajo(rs.getInt("legajo"));
+					d.setTipo(rs.getString("tipo_doc"));
+					d.setNro(rs.getInt("nro_doc"));
+					p.setDocumento(d);
+					p.setNombre(rs.getString("nombre"));
+					p.setApellido(rs.getString("apellido"));
+					p.setEmail(rs.getString("email"));
+					p.setTelefono(rs.getString("telefono"));
+					p.setDomicilio(rs.getString("domicilio"));
+					p.setFechaNacimiento(rs.getDate("fecha_nac").toLocalDate());
+					p.setSexo(rs.getString("sexo"));
+					p.setRol(rs.getString("rol"));
+					p.setObrasSociales(dos.getByPersona(p));
+					if (p.getRol().equals("profesional")) p.setEspecialidades(de.getByProfesional(p));
+				}				
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
+	}
+	
 }

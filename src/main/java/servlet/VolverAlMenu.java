@@ -8,19 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Persona;
-import logic.ABMCTurno;
 
 /**
- * Servlet implementation class CrearTurnos
+ * Servlet implementation class VolverAlMenu
  */
-@WebServlet({ "/CrearTurnos", "/Crearturnos", "/crearturnos", "/crearTurnos" })
-public class CrearTurnos extends HttpServlet {
+@WebServlet("/VolverAlMenu")
+public class VolverAlMenu extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CrearTurnos() {
+    public VolverAlMenu() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,17 +38,18 @@ public class CrearTurnos extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Persona p = (Persona)request.getSession().getAttribute("usuario");
-		if (p.getRol() != "profesional") {
-			request.getRequestDispatcher("WEB-INF/sinPermiso.html").forward(request, response);
+		if (p.getRol() == "paciente") {
+			request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
 			return;
-			
 		}
-		
-		ABMCTurno abmcTurno = new ABMCTurno();
-		abmcTurno.crearTurnos();
-		
-		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
-		return;
+		else if (p.getRol() == "profesional") {
+			request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
+			return;
+		}
+		else {
+			request.getRequestDispatcher("index.html").forward(request, response);
+			return;
+		}
 	}
 
 }
