@@ -76,5 +76,13 @@ public class ABMCTurno {
 		return dt.getReservas(paciente);
 	}
 	
+	public Turno consultaUno(Turno t) {
+		DataTurno dt = new DataTurno();
+		return dt.getById(t);
+	}
 	
+	public void actualizarTurno(Turno t) {
+		DataTurno dt = new DataTurno();
+		dt.updateTurno(t);
+	}
 }

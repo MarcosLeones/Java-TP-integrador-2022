@@ -13,12 +13,13 @@ public class CancelarTurno {
 		DataTurno dataTurno = new DataTurno();
 		ArrayList<Turno> turnos = dataTurno.getReservas(paciente);
 		//Solo se pueden cancelar las reservas con al menos un día de anticipación.
-		/*for(Turno t: turnos) {
-			if (t.getFecha().isBefore(LocalDate.now())) {
-				turnos.remove(t);
+		ArrayList<Turno> turnosCancelables = new ArrayList<Turno>();
+		for(Turno t: turnos) {
+			if (t.getFecha().isAfter(LocalDate.now().plusDays(1))) {
+				turnosCancelables.add(t);
 			}
-		}*/
-		return turnos;
+		}
+		return turnosCancelables;
 	}
 	
 	public void registrarCancelacion(Turno t) {

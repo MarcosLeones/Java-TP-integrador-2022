@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,19 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Persona;
-import logic.ABMCTurno;
+import entities.Turno;
+import logic.RegistrarAtencion;
 
 /**
- * Servlet implementation class CrearTurnos
+ * Servlet implementation class MostrarTurnosDelDia
  */
-@WebServlet({ "/CrearTurnos", "/Crearturnos", "/crearturnos", "/crearTurnos" })
-public class CrearTurnos extends HttpServlet {
+@WebServlet("/MostrarTurnosDelDia")
+public class MostrarTurnosDelDia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CrearTurnos() {
+    public MostrarTurnosDelDia() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,10 +48,10 @@ public class CrearTurnos extends HttpServlet {
 			
 		}
 		
-		ABMCTurno abmcTurno = new ABMCTurno();
-		abmcTurno.crearTurnos();
-		
-		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
+		RegistrarAtencion ra = new RegistrarAtencion();
+		ArrayList<Turno> turnos = ra.getTurnosDelDia(p);
+		request.setAttribute("turnos", turnos);
+		request.getRequestDispatcher("WEB-INF/seleccionarAtencion.jsp").forward(request, response);
 		return;
 	}
 

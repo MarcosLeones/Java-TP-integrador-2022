@@ -68,7 +68,7 @@ public class DataTurno {
 
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"UPDATE turno SET legajo_profesional=?, legajo_paciente=?, fecha=?, hora=?, estado=? " 
+					"UPDATE turno SET legajo_profesional=?, legajo_paciente=?, fecha=?, hora=?, estado=?, historia_clinica=? " 
 					+ " WHERE id_turno=?"
 					);
 			stmt.setInt(1, turno.getProfesional().getLegajo());			
@@ -81,7 +81,12 @@ public class DataTurno {
 			stmt.setObject(3, turno.getFecha());
 			stmt.setObject(4, turno.getHora());
 			stmt.setString(5, turno.getEstado());
-			stmt.setInt(6, turno.getId());
+			if (turno.getHistoriaClinica() == null) {
+				stmt.setNull(6, Types.VARCHAR);
+			} else {
+				stmt.setString(6, turno.getHistoriaClinica());
+			}
+			stmt.setInt(7, turno.getId());
 			
 			stmt.executeUpdate();			
 			
@@ -120,7 +125,7 @@ public class DataTurno {
 					t.setFecha(rs.getDate("fecha").toLocalDate());
 					t.setHora(rs.getTime("hora").toLocalTime());
 					t.setEstado(rs.getString("estado"));
-
+					t.setHistoriaClinica(rs.getString("historia_clinica"));
 					turnos.add(t);
 				}
 			}
@@ -368,6 +373,53 @@ public class DataTurno {
 		}
 		
 		return t;
-	
 	}
+	
+	
+	public ArrayList<Turno> getByProfesionalHoy(Persona profesional) {
+		ArrayList<Turno> turnos = new ArrayList<Turno>();
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT * FROM turno WHERE legajo_profesional=? and fecha= DATE(NOW()) and legajo_paciente is not null and estado='reservado' order by  hora");
+			stmt.setInt(1, profesional.getLegajo());
+			rs=stmt.executeQuery();
+		
+			if (rs != null) {
+				while (rs.next()) {
+					Turno t = new Turno();
+					Persona p;
+					p = dp.getByLegajo(rs.getInt("legajo_profesional"));
+					t.setProfesional(p);
+					p= dp.getByLegajo(rs.getInt("legajo_paciente"));
+					t.setPaciente(p);
+					t.setId(rs.getInt("id_turno"));
+					t.setFecha(rs.getDate("fecha").toLocalDate());
+					t.setHora(rs.getTime("hora").toLocalTime());
+					t.setEstado(rs.getString("estado"));
+					t.setHistoriaClinica(rs.getString("historia_clinica"));
+
+					turnos.add(t);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}	
+		return turnos;
+	}
+	
 }

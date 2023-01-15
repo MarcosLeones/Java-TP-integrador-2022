@@ -10,6 +10,7 @@ public class Turno {
 	private String estado;
 	private Persona paciente;
 	private Persona profesional;
+	private String historiaClinica;
 	
 	
 	public int getId() {
@@ -47,6 +48,12 @@ public class Turno {
 	}
 	public void setProfesional(Persona profesional) {
 		this.profesional = profesional;
+	}
+	public String getHistoriaClinica() {
+		return historiaClinica;
+	}
+	public void setHistoriaClinica(String historiaClinica) {
+		this.historiaClinica = historiaClinica;
 	}
 	
 	

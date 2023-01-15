@@ -8,19 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Persona;
+import entities.Turno;
 import logic.ABMCTurno;
+import logic.RegistrarAtencion;
 
 /**
- * Servlet implementation class CrearTurnos
+ * Servlet implementation class GuardarAtencion
  */
-@WebServlet({ "/CrearTurnos", "/Crearturnos", "/crearturnos", "/crearTurnos" })
-public class CrearTurnos extends HttpServlet {
+@WebServlet("/GuardarAtencion")
+public class GuardarAtencion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CrearTurnos() {
+    public GuardarAtencion() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,11 +47,20 @@ public class CrearTurnos extends HttpServlet {
 			
 		}
 		
+		String historia_clinica = request.getParameter("historia_clinica");
+		String estado = request.getParameter("estado");
+		int id_turno = Integer.parseInt(request.getParameter("turno_actual"));
 		ABMCTurno abmcTurno = new ABMCTurno();
-		abmcTurno.crearTurnos();
-		
+		Turno t = new Turno();
+		t.setId(id_turno);
+		Turno turno = abmcTurno.consultaUno(t);
+		turno.setEstado(estado);
+		turno.setHistoriaClinica(historia_clinica);
+		RegistrarAtencion ra = new RegistrarAtencion();
+		ra.registrarHistoriaClinica(turno);
 		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
 		return;
+		
 	}
 
 }

@@ -38,23 +38,40 @@ public class Signin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("POST - Served at: ").append(request.getContextPath());
-		
-		//response.getWriter().append(request.getParameter("email")).append(request.getParameter("password"));
-		
-		//if(request.getParameter("ingresar")!=null) {
-		//	System.out.println("ingresar");
-		//}
-		/*
+
+/*		
 		Persona per = new Persona();
 		Login ctrlLogin = new Login();
 		
 		per.setEmail(request.getParameter("email"));
 		per.setPassword(request.getParameter("password"));
 		
-		per = ctrlLogin.validate(per);
-		*/
+		Persona p = ctrlLogin.validate(per);
+		
+		if (p.getRol() == null || p.getEmail() == null || p.getLegajo() == 0) {
+			request.getRequestDispatcher("WEB-INF/loginError.jsp").forward(request, response);
+			return;
+		}
+		else {
+			if (p.getRol().equals("profesional")) {
+				p.setRol("profesional");
+				request.getSession().setAttribute("usuario", p);
+				request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
+				return;
+			}
+			else if (p.getRol().equals("paciente")) {
+				p.setRol("paciente");
+				request.getSession().setAttribute("usuario", p);
+				request.getRequestDispatcher("WEB-INF/menuPaciente.jsp").forward(request, response);
+				return;
+			}
+			else {
+				request.getRequestDispatcher("WEB-INF/loginError.jsp").forward(request, response);
+				return;
+			}
+		}
+*/		
+
 /////////////////////
 String rol = request.getParameter("rol");
 if (rol.equals("paciente")) {
@@ -82,6 +99,7 @@ else {
 		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
 		return;
 }		
+
 	}
 
 }

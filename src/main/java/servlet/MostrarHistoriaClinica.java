@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,19 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Persona;
+import entities.Turno;
 import logic.ABMCTurno;
+import logic.RegistrarAtencion;
 
 /**
- * Servlet implementation class CrearTurnos
+ * Servlet implementation class MostrarHistoriaClinica
  */
-@WebServlet({ "/CrearTurnos", "/Crearturnos", "/crearturnos", "/crearTurnos" })
-public class CrearTurnos extends HttpServlet {
+@WebServlet("/MostrarHistoriaClinica")
+public class MostrarHistoriaClinica extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CrearTurnos() {
+    public MostrarHistoriaClinica() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,7 +41,7 @@ public class CrearTurnos extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		Persona p = (Persona)request.getSession().getAttribute("usuario");
 		if (p.getRol() != "profesional") {
 			request.getRequestDispatcher("WEB-INF/sinPermiso.html").forward(request, response);
@@ -45,11 +49,18 @@ public class CrearTurnos extends HttpServlet {
 			
 		}
 		
+		int id_turno = Integer.parseInt(request.getParameter("turno"));
 		ABMCTurno abmcTurno = new ABMCTurno();
-		abmcTurno.crearTurnos();
-		
-		request.getRequestDispatcher("WEB-INF/menuProfesional.jsp").forward(request, response);
+		Turno t = new Turno();
+		t.setId(id_turno);
+		Turno turno = abmcTurno.consultaUno(t);
+		RegistrarAtencion ra = new RegistrarAtencion();
+		ArrayList<Turno> turnos = ra.getHistoriasClinica(turno.getPaciente());
+		request.setAttribute("turnos", turnos);
+		request.setAttribute("turno_actual", turno);
+		request.getRequestDispatcher("WEB-INF/formularioAtencion.jsp").forward(request, response);
 		return;
+		
 	}
 
 }
